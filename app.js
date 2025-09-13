@@ -61,4 +61,4 @@ app.put("/tickets/:id", (req, res) => {
     res.json({ ok: true });
 });
 
-app.listen(3000, () => console.log("HelpDesk+ on 3000 (token=123456)"));
+app.listen(3000, () => console.log("HelpDesk+ on 3000"));
