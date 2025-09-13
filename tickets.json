@@ -10,7 +10,14 @@
     "id": 2,
     "title": "Titulo",
     "customer": "Cliente A",
-    "status": "closed",
+    "status": "open",
     "createdAt": "2025-09-13T14:18:56.899Z"
+  },
+  {
+    "id": 3,
+    "title": "Erro 90",
+    "customer": "Cliente 27",
+    "status": "open",
+    "createdAt": "2025-09-13T14:59:31.564Z"
   }
 ]
