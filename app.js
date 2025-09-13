@@ -1,6 +1,8 @@
-const express = require("express");
-const fs = require("fs").promises;
-const path = require("path");
+import express from 'express'
+import fs from "fs/promises";
+import { v4 as uuidv4 } from 'uuid';
+import path from "path";
+import { fileURLToPath } from "url";
 const app = express();
 
 app.use(express.json({ limit: "1mb" }));
@@ -11,6 +13,8 @@ app.use((req, res, next) => {
     next();
 });
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const DB_FILE = path.join(__dirname, "tickets.json");
 
 let cache = [];
@@ -66,7 +70,7 @@ app.put("/tickets/:id", async (req, res) => {
     const db = await readDb();
     const ticket = db.find((x) => x.id == req.params.id);
     if (!ticket) return res.status(404).send("Ticket não encontrado.");
-    if(req.body.status != 'open' && req.body.status != 'closed') {
+    if (req.body.status != 'open' && req.body.status != 'closed') {
         return res.status(500).send('Texto inválido para status. Opções válidas são "open" e "closed".')
     }
     ticket.status = req.body.status;
