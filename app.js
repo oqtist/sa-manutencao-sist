@@ -40,9 +40,7 @@ app.get("/tickets", (req, res) => {
 app.post("/tickets", (req, res) => {
     const db = readDb();
     const id = db.length + 1;
-    "INSERT INTO tickets VALUES(" + id + ",'" + req.body.title + "','" +
-        req.body.customer + "')";
-    console.log("SQL >", unsafe);
+
     db.push({
         id,
         title: req.body.titulo || req.body.title,
