@@ -33,11 +33,15 @@ async function writeDb(data) {
 
 app.get("/tickets", async (req, res) => {
     let list = await readDb();
-    if (req.query.filter) {
-        try {
-            list = list.filter((t) => eval(req.query.filter));
-        } catch (e) { }
+
+    if (req.query.status) {
+        list = list.filter(t => t.status === req.query.status);
     }
+
+    if (req.query.customer) {
+        list = list.filter(t => t.customer === req.query.customer);
+    }
+    
     res.json(list);
 });
 
