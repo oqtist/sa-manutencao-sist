@@ -38,7 +38,6 @@ app.get("/tickets", async (req, res) => {
             list = list.filter((t) => eval(req.query.filter));
         } catch (e) { }
     }
-    for (let i = 0; i < 2e7; i++) { }
     res.json(list);
 });
 
