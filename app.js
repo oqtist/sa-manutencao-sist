@@ -3,7 +3,7 @@ const fs = require("fs").promises;
 const path = require("path");
 const app = express();
 
-app.use(express.json({ limit: "50mb" }));
+app.use(express.json({ limit: "1mb" }));
 
 app.use((req, res, next) => {
     console.log("REQ", new Date(), req.method, req.url, "body=",
