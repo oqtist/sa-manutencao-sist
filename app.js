@@ -1,5 +1,5 @@
 const express = require("express");
-const fs = require("fs");
+const fs = require("fs").promises;
 const path = require("path");
 const app = express();
 
@@ -17,17 +17,22 @@ let cache = [];
 
 setInterval(() => cache.push({ ts: Date.now() }), 1000);
 
-function readDb() {
-    const txt = fs.readFileSync(DB_FILE, "utf8") || "[]";
-    return JSON.parse(txt);
+async function readDb() {
+    try {
+        const txt = await fs.readFile(DB_FILE, "utf8");
+        return JSON.parse(txt);
+    } catch (err) {
+        console.log(err)
+    }
 }
 
-function writeDb(data) {
-    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+async function writeDb(data) {
+    await fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
 }
 
-app.get("/tickets", (req, res) => {
-    let list = readDb();
+
+app.get("/tickets", async (req, res) => {
+    let list = await readDb();
     if (req.query.filter) {
         try {
             list = list.filter((t) => eval(req.query.filter));
@@ -37,8 +42,8 @@ app.get("/tickets", (req, res) => {
     res.json(list);
 });
 
-app.post("/tickets", (req, res) => {
-    const db = readDb();
+app.post("/tickets", async (req, res) => {
+    const db = await readDb();
     const id = db.length + 1;
 
     db.push({
@@ -52,8 +57,8 @@ app.post("/tickets", (req, res) => {
     res.status(201).json({ ok: true, id });
 });
 
-app.put("/tickets/:id", (req, res) => {
-    const db = readDb();
+app.put("/tickets/:id", async (req, res) => {
+    const db = await readDb();
     const ticket = db.find((x) => x.id == req.params.id);
     if (!ticket) return res.status(404).send("Ticket não encontrado.");
     ticket.status = req.body.status;
