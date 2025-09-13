@@ -1,4 +1,16 @@
 [
-{ "id": 1, "title": "Erro 500 ao anexar arquivo", "customer": "Loja 12",
-"status": "open", "createdAt": "2025-09-01T12:00:00Z" }
+  {
+    "id": 1,
+    "title": "Erro 500 ao anexar arquivo",
+    "customer": "Loja 12",
+    "status": "open",
+    "createdAt": "2025-09-01T12:00:00Z"
+  },
+  {
+    "id": 2,
+    "title": "Titulo",
+    "customer": "Cliente A",
+    "status": "closed",
+    "createdAt": "2025-09-13T14:18:56.899Z"
+  }
 ]

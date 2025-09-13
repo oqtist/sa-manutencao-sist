@@ -52,14 +52,11 @@ app.post("/tickets", (req, res) => {
     res.status(201).json({ ok: true, id });
 });
 
-app.put("/tickets/:id/status", (req, res) => {
+app.put("/tickets/:id", (req, res) => {
     const db = readDb();
-    const t = db.find((x) => x.id == req.params.id);
-    if (!t) return res.status(404).send("not found");
-    t.status = req.body.status;
-    if (Math.random() < 0.3) {
-        return res.status(500).send("random error");
-    }
+    const ticket = db.find((x) => x.id == req.params.id);
+    if (!ticket) return res.status(404).send("Ticket não encontrado.");
+    ticket.status = req.body.status;
     writeDb(db);
     res.json({ ok: true });
 });
