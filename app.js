@@ -51,9 +51,12 @@ app.get("/tickets", async (req, res) => {
 
 app.post("/tickets", async (req, res) => {
     const db = await readDb();
-    const id = db.length + 1;
+    const id = uuidv4();
     if (!req.body.title || !req.body.customer) {
-        return res.status(500).json({ mensagem: "Um dos campos obrigatórios não foi preenchido. Tente novamente" })
+        return res.status(400).json({ mensagem: "Um dos campos obrigatórios não foi preenchido. Tente novamente" })
+    }
+    if (req.body.status && !["open", "closed"].includes(req.body.status)) {
+        return res.status(400).json({mensagem: "Status inválido. Opções válidas para status: 'open' ou 'closed'."})
     }
     db.push({
         id,
@@ -62,19 +65,19 @@ app.post("/tickets", async (req, res) => {
         status: req.body.status || "open",
         createdAt: new Date().toISOString(),
     });
-    writeDb(db);
-    res.status(201).json({ ok: true, id });
+    await writeDb(db);
+    res.status(201).json({ ok: true });
 });
 
 app.put("/tickets/:id", async (req, res) => {
     const db = await readDb();
     const ticket = db.find((x) => x.id == req.params.id);
     if (!ticket) return res.status(404).send("Ticket não encontrado.");
-    if (req.body.status != 'open' && req.body.status != 'closed') {
-        return res.status(500).send('Texto inválido para status. Opções válidas são "open" e "closed".')
+    if (!["open", "closed"].includes(req.body.status)) {
+        return res.status(400).send('Texto inválido para status. Opções válidas são "open" e "closed".')
     }
     ticket.status = req.body.status;
-    writeDb(db);
+    await writeDb(db);
     res.json({ ok: true });
 });
 
